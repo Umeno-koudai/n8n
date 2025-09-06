@@ -1,0 +1,14 @@
+{
+  "name": "n8n_mcp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "docker-compose up -d && npm run import",
+    "import": "chmod +x ./import_workflows.sh && ./import_workflows.sh -o",
+    "db_reset": "docker-compose down -v && docker-compose up -d"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,286 @@
+{
+  "name": "slack_command2",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "video",
+        "modelId": {
+          "__rl": true,
+          "value": "models/veo-2.0-generate-001",
+          "mode": "list",
+          "cachedResultName": "models/veo-2.0-generate-001"
+        },
+        "prompt": "={{ $json.body.text }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        352,
+        0
+      ],
+      "id": "5dfa7a30-8c2f-4b02-93ea-9d716f3b555e",
+      "name": "Generate a video",
+      "retryOnFail": false,
+      "executeOnce": false,
+      "alwaysOutputData": false,
+      "notesInFlow": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "7ud32HBv6ZnQ7ZmT",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "options": {
+          "channelId": "=C091Y7ZLSQP"
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        480,
+        0
+      ],
+      "id": "f930fb99-16cb-4c0e-82ef-5413dd06b4b3",
+      "name": "Upload a file",
+      "webhookId": "ab46a206-af25-41d0-acd3-a2d0ef208081",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "jtIKpA1mzNH5H0ne",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "=C091Y7ZLSQP",
+          "mode": "id"
+        },
+        "text": "={{ $json.url_private }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        592,
+        0
+      ],
+      "id": "d64bd76b-6f9b-45b4-bd19-6bb1893d3ca8",
+      "name": "Send a message",
+      "webhookId": "3c70e17f-6b89-4593-b355-b1dfaeb2293f"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "options": {
+          "channelId": "=C091Y7ZLSQP"
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        480,
+        256
+      ],
+      "id": "0e93ea76-f9e8-47c2-b9ce-81fb86d18be4",
+      "name": "Upload a file1",
+      "webhookId": "ab46a206-af25-41d0-acd3-a2d0ef208081",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "jtIKpA1mzNH5H0ne",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "=C091Y7ZLSQP",
+          "mode": "id"
+        },
+        "text": "={{ $json.url_private }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        720,
+        256
+      ],
+      "id": "79288bfa-c21a-4a94-bd58-c32c5a7b1b0a",
+      "name": "Send a message1",
+      "webhookId": "3c70e17f-6b89-4593-b355-b1dfaeb2293f",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "jtIKpA1mzNH5H0ne",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/imagen-3.0-generate-002",
+          "mode": "list",
+          "cachedResultName": "models/imagen-3.0-generate-002"
+        },
+        "prompt": "={{ $json.body.text }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        224,
+        256
+      ],
+      "id": "54f829bb-6fa2-4091-b1d7-623032146789",
+      "name": "Generate an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "7ud32HBv6ZnQ7ZmT",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "d68c3cf0-3599-49cc-8cd5-c79c4c20752d",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        256
+      ],
+      "id": "6112c3b8-9452-41d0-9dea-240c99e47176",
+      "name": "画像生成WebHook",
+      "webhookId": "d68c3cf0-3599-49cc-8cd5-c79c4c20752d"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ae0b9fe5-9cd3-4bd9-a71b-c56d7aca7f8b",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9297ae7c-9f4b-45b8-9d23-0718360f886f",
+      "name": "動画生成Webhook",
+      "webhookId": "ae0b9fe5-9cd3-4bd9-a71b-c56d7aca7f8b"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        288,
+        -320
+      ],
+      "id": "4a70f955-6491-41d3-933f-6fcaeb685da2",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Generate a video": {
+      "main": [
+        [
+          {
+            "node": "Upload a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload a file": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload a file1": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "Upload a file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "画像生成WebHook": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "動画生成Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9ac4b075-726a-48f8-b05e-a6c1dffbca81",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fe0f33080bb56d4e1e9a4422b77c72f2caf667da15f7a1b1646616dcfae5231f"
+  },
+  "id": "JTKGVlJSsP61dTSd",
+  "tags": []
+}

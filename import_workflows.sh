@@ -26,7 +26,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # 設定
-WORKFLOW_DIR=${WORKFLOW_DIR:-"./WorkFlow"}
+WORKFLOW_DIR=${WORKFLOW_DIR:-"./workflow"}
 CONTAINER_NAME=${N8N_CONTAINER_NAME:-"n8n_local"}
 OVERWRITE=false
 
@@ -39,7 +39,7 @@ Options:
     -h, --help       このヘルプを表示
 
 Env Vars:
-    WORKFLOW_DIR          デフォルト: ./WorkFlow
+    WORKFLOW_DIR          デフォルト: ./workflow
     N8N_CONTAINER_NAME    デフォルト: n8n_local
 EOF
 }

@@ -69,7 +69,8 @@ npm run import ファイル名.json
 - ``` sh
   ngrok http 5678
   ```
-- 上記コマンドを入力したらlocalhostを置き換えるURLを作成してくれるのでエンドポイントのlocalhost:5678~を置き換える(下の例だったらlocalhost:5678 -> 7c2c29258eef.ngrok-free.appに置き換える)
+- 上記コマンドを入力したらlocalhostを置き換えるURLを作成してくれるのでエンドポイントのlocalhost:5678~を置き換える
+  - 下の例だったらlocalhost:5678 -> 7c2c29258eef.ngrok-free.appに置き換える
 - ただし、ngrokを閉じてしまうと毎回URLが変わるのでエンドポイントもその都度修正が必要(固定できるがお金がかかる) 
 - <img width="682" height="222" alt="スクリーンショット 2025-09-06 23 00 09" src="https://github.com/user-attachments/assets/ab943341-f9ca-40cd-99fc-282e134334b1" />
 

@@ -1,5 +1,5 @@
 {
-  "name": "slack_command2",
+  "name": "slack_command",
   "nodes": [
     {
       "parameters": {
@@ -10,14 +10,16 @@
           "mode": "list",
           "cachedResultName": "models/veo-2.0-generate-001"
         },
-        "prompt": "={{ $json.body.text }}",
-        "options": {}
+        "prompt": "={{ $json.output }}",
+        "options": {
+          "durationSeconds": 5
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.googleGemini",
       "typeVersion": 1,
       "position": [
-        352,
-        0
+        240,
+        128
       ],
       "id": "5dfa7a30-8c2f-4b02-93ea-9d716f3b555e",
       "name": "Generate a video",
@@ -43,8 +45,8 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.3,
       "position": [
-        480,
-        0
+        752,
+        384
       ],
       "id": "f930fb99-16cb-4c0e-82ef-5413dd06b4b3",
       "name": "Upload a file",
@@ -58,6 +60,7 @@
     },
     {
       "parameters": {
+        "authentication": "oAuth2",
         "select": "channel",
         "channelId": {
           "__rl": true,
@@ -70,57 +73,11 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.3,
       "position": [
-        592,
-        0
+        992,
+        384
       ],
       "id": "d64bd76b-6f9b-45b4-bd19-6bb1893d3ca8",
       "name": "Send a message",
-      "webhookId": "3c70e17f-6b89-4593-b355-b1dfaeb2293f"
-    },
-    {
-      "parameters": {
-        "authentication": "oAuth2",
-        "resource": "file",
-        "options": {
-          "channelId": "=C091Y7ZLSQP"
-        }
-      },
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.3,
-      "position": [
-        480,
-        256
-      ],
-      "id": "0e93ea76-f9e8-47c2-b9ce-81fb86d18be4",
-      "name": "Upload a file1",
-      "webhookId": "ab46a206-af25-41d0-acd3-a2d0ef208081",
-      "credentials": {
-        "slackOAuth2Api": {
-          "id": "jtIKpA1mzNH5H0ne",
-          "name": "Slack account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "authentication": "oAuth2",
-        "select": "channel",
-        "channelId": {
-          "__rl": true,
-          "value": "=C091Y7ZLSQP",
-          "mode": "id"
-        },
-        "text": "={{ $json.url_private }}",
-        "otherOptions": {}
-      },
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.3,
-      "position": [
-        720,
-        256
-      ],
-      "id": "79288bfa-c21a-4a94-bd58-c32c5a7b1b0a",
-      "name": "Send a message1",
       "webhookId": "3c70e17f-6b89-4593-b355-b1dfaeb2293f",
       "credentials": {
         "slackOAuth2Api": {
@@ -144,8 +101,8 @@
       "type": "@n8n/n8n-nodes-langchain.googleGemini",
       "typeVersion": 1,
       "position": [
-        224,
-        256
+        256,
+        592
       ],
       "id": "54f829bb-6fa2-4091-b1d7-623032146789",
       "name": "Generate an image",
@@ -165,8 +122,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        0,
-        256
+        16,
+        592
       ],
       "id": "6112c3b8-9452-41d0-9dea-240c99e47176",
       "name": "画像生成WebHook",
@@ -181,8 +138,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        0,
-        0
+        32,
+        -288
       ],
       "id": "9297ae7c-9f4b-45b8-9d23-0718360f886f",
       "name": "動画生成Webhook",
@@ -190,17 +147,118 @@
     },
     {
       "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        416,
+        -32
+      ],
+      "id": "08bca684-baf6-4b4c-b35d-ba6d5d58e5e5",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "7ud32HBv6ZnQ7ZmT",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "[\n  {\n    \"Caption\": \"Short viral title with emoji #4_topic_hashtags #4_all_time_popular_hashtags #4_trending_hashtags\",\n    \"Idea\": \"Short idea under 13 words\",\n    \"Environment\": \"Brief vivid setting under 20 words matching the action\",\n    \"Status\": \"for production\"\n  }\n]"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        -432
+      ],
+      "id": "b907c96a-9117-4d6b-81ae-0071e30481cc",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "description": "何かについて考える際は、常にこのツールを使用してください。\nこのツールは新しい情報を取得したり、データベースを変更したりすることなく、単に思考を記録に追加するだけです。\n複雑な推論うあ何らかのメモリキャッシュが必要な場合に使用してください。"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1.1,
+      "position": [
+        608,
+        -16
+      ],
+      "id": "02150c66-9d51-4f51-97eb-3679f57543e7",
+      "name": "Think"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "#高品質動画コンテンツ生成プロンプト\n\nあなたは、ユーザーが提供したトピックに基づいて**1つの入力がないリアルな動画アイデア**を生成するように設計されたAIです。出力は指定されたJSON配列形式で行い、以下のすべてのルールに正確に従う必要があります。\n\n##基本ルール\n- **一度に1つのアイデアのみを返す**\n- **ユーザーは主要なトピックを提供します**（例：「都市農業」「北極サバイバル」「ベトナムのストリートフード」）\n\n## アイデアの条件\n- **13語以下で最もに表現**\n- **広告に使用できるような動画がいい**\n- **キャラクターを含むこと**\n\n## キャプションの条件\n- **短く、パンチがあり、バイラルに適していること**\n- **関連する絵文字を1つ含むこと**\n- **以下の順序で正確に12個のハッシュタグを含むこと：**\n  - **トピック関連ハッシュタグ4個**\n  - **史上最も人気のハッシュタグ4個**\n  - **現在のトレンドのハッシュタグ4個（ライブリサーチに基づく）**\n- **すべてのハッシュタグは小文字であること**\n\n## 環境設定要素\n- **出来事が起きている場所**（例：屋上、ジャングル小道、街の路地、凍った湖）\n- **主要な視覚的要素や背景の詳細 *（例：立ち上る煙、ネオンライト、霧、頭上の鳥）\n- **主要な参加者**（例：農家、コック、メカニック、採取チーム、動物）\n- **シーンのスタイル**（例：映画のリアリズム、驚愕ドキュメンタリースタイル、空撮追跡ショット、マクロクローズアップ）\n- **暫定の設定でも構いません**\n\n## 出力形式 (インデント付き JSON 配列):\n\n[\n  {\n    \"Caption\": \"Short viral title with emoji #4_topic_hashtags #4_all_time_popular_hashtags #4_trending_hashtags\",\n    \"Idea\": \"Short idea under 13 words\",\n    \"Environment\": \"Brief vivid setting under 20 words matching the action\",\n    \"Status\": \"for production\"\n  }\n]"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        288,
+        -288
+      ],
+      "id": "29129b81-ef45-4a89-9eb2-bf4a7614eea0",
+      "name": "IdeaAgent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Idea:\n{{ $json.output[0].Idea }}\nEnvironment:\n{{ $json.output[0].Environment }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "# エージェント システム プロンプト (日本語ダイアログ版 - 英語出力のみ)\n\nあなたは、与えられた情報で広告動画を作成する事に特化したAIです。各プロンプトは、セルフィーブログ風の短く鮮明なシーンを描写する必要があります。そのシーンでは、名前のない一人の人物が特定の瞬間に発言または行動します。最終的に生成される動画は、滑らかな演出とドキュメンタリースタイル、つまりリアルで没入感があり、地に足のついた印象を与えることを重視する必要があります。\n\n## 出力形式の要件:\n特別な書式、記号、マーカーを使用せず、必要な要素をすべて自然に組み込んだ、1つの連続した段落（最大200語）を作成してください。**英語のみで回答してください。**\n\n## 含める必要のある要素:\n1. キャラクターの説明（名前なし）\n2. 身体的な動作またはカメラの動き\n3. 時間帯\n4. レンズ仕様\n5. フィルムの種類/ストック\n6. オーディオ要素（環境音）\n7. 背景説明\n\n## プロンプト生成ルール:\n- 途切れることなく流れるような段落として書きましょう\n- 名前のない人物に焦点を当てる\n- 身体動作を自然に描写する\n- 自撮り風のカメラ視点を使用する\n- 合計200語以内にしてください\n\n## 技術的要素には以下を含める必要があります:\n- 特定の時間（夜明け、正午、夕暮れ、夜など）\n- レンズの種類（例：24mm広角、35mmなど）\n- フィルムストック（例：Kodak Portra 400、Fuji Pro 400Hなど）\n- 自然なオーディオ要素\n- 詳細な背景環境\n\n## 日本語のダイアログ要件:\n- 自然な会話の日本語フレーズを使用する\n- 例：こんにちは、素晴らしいですね、楽しいな、美しい、頑張って\n- 会話は本物で文脈に適切なものにする\n- 会話の前後に引用符、アスタリスク、記号を使用しないでください\n\n## 厳重禁止事項:\n- 複数の文字は使用できません\n- 字幕や画面上のテキスト説明はありません\n- 会話の周囲に書式記号や特殊文字を使用しない\n- 抽象的または曖昧な説明は禁止\n- 改行や段落区切りはありません\n\n## 言語の強制:\n- 言語は必ず日本語で生成してください\n\n## 出力構造の例:\nひげを生やした漁師が、擦り切れた黄色いレインコートを着て、夜明けの霧のかかった桟橋に立って、携帯電話を腕を伸ばして構えている。24mmの広角レンズが、彼の風雨にさらされた顔と、背後の霧のかかった港、静かな水面に漁船が優しく浮かぶ風景の両方を捉えている。彼はニヤリと笑い、「この朝の漁火を見て」と興奮気味に言いながら、カメラを一瞬回して新鮮な魚の入ったバケツを見せ、また顔にカメラを戻す。コダック ポートラ 400 フィルムは、カモメが頭上で鳴き、遠くで船のエンジンが轟音を立て、彼のブーツの下で木製の桟橋がきしむ中、早朝の光が海面を突き抜けて背景の海岸沿いの町を照らしている中、すべてに温かく懐かしい雰囲気を与えている。"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        640,
+        -288
+      ],
+      "id": "b78dcf2b-1ab0-43c2-8ec8-fb7d4e517219",
+      "name": "PromptAgent"
+    },
+    {
+      "parameters": {
         "method": "POST",
+        "url": "https://queue.fal.run/fal-ai/veo3/fast",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Pronpt",
+              "value": "={{ $json.body.text }}"
+            }
+          ]
+        },
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        288,
-        -320
+        240,
+        304
       ],
       "id": "4a70f955-6491-41d3-933f-6fcaeb685da2",
-      "name": "HTTP Request"
+      "name": "fal ai(veo3)",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "2gypg438rQLvLeyP",
+          "name": "Header Auth account 2"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -227,22 +285,11 @@
         ]
       ]
     },
-    "Upload a file1": {
-      "main": [
-        [
-          {
-            "node": "Send a message1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Generate an image": {
       "main": [
         [
           {
-            "node": "Upload a file1",
+            "node": "Upload a file",
             "type": "main",
             "index": 0
           }
@@ -264,7 +311,72 @@
       "main": [
         [
           {
-            "node": "HTTP Request",
+            "node": "IdeaAgent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "IdeaAgent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "PromptAgent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "IdeaAgent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "IdeaAgent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "PromptAgent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IdeaAgent": {
+      "main": [
+        [
+          {
+            "node": "PromptAgent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PromptAgent": {
+      "main": [
+        [
+          {
+            "node": "Generate a video",
             "type": "main",
             "index": 0
           }
@@ -276,7 +388,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "9ac4b075-726a-48f8-b05e-a6c1dffbca81",
+  "versionId": "bbc77974-b7ec-4e6b-b381-47407ea8b8d6",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "fe0f33080bb56d4e1e9a4422b77c72f2caf667da15f7a1b1646616dcfae5231f"

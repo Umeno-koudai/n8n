@@ -25,21 +25,26 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+
 # 設定
-WORKFLOW_DIR=${WORKFLOW_DIR:-"./workflow"}
+WORKFLOW_DIR=${WORKFLOW_DIR:-"./WorkFlow"}
 CONTAINER_NAME=${N8N_CONTAINER_NAME:-"n8n_local"}
 OVERWRITE=false
+TARGET_FILE=""
 
 usage() {
     cat <<EOF
-Usage: $(basename "$0") [options]
+Usage: $(basename "$0") [options] [workflow_file.json]
 
 Options:
     -o, --overwrite  既存ワークフローを上書き (--overwrite)
     -h, --help       このヘルプを表示
 
+Args:
+    workflow_file.json    インポートしたいワークフローのファイル名（省略時はディレクトリ内全件）
+
 Env Vars:
-    WORKFLOW_DIR          デフォルト: ./workflow
+    WORKFLOW_DIR          デフォルト: ./WorkFlow
     N8N_CONTAINER_NAME    デフォルト: n8n_local
 EOF
 }
@@ -51,6 +56,8 @@ parse_args() {
                 OVERWRITE=true; shift ;;
             -h|--help)
                 usage; exit 0 ;;
+            *.json)
+                TARGET_FILE="$1"; shift ;;
             *)
                 log_warning "未対応の引数: $1"; usage; exit 1 ;;
         esac
@@ -85,28 +92,48 @@ check_docker_container() {
     log_success "コンテナ稼働中"
 }
 
-# ワークフローディレクトリの確認
-check_workflow_directory() {
-    log_info "ワークフローディレクトリ確認: $WORKFLOW_DIR"
-    if [[ ! -d "$WORKFLOW_DIR" ]]; then
-        log_error "ディレクトリが存在しません: $WORKFLOW_DIR"
-        exit 1
+# ワークフローディレクトリまたはファイルの確認
+check_workflow_target() {
+    if [[ -n "$TARGET_FILE" ]]; then
+        # ファイル指定時
+        local file_path="$WORKFLOW_DIR/$TARGET_FILE"
+        log_info "ワークフローファイル確認: $file_path"
+        if [[ ! -f "$file_path" ]]; then
+            log_error "ファイルが存在しません: $file_path"
+            exit 1
+        fi
+        log_success "ファイル検出: $file_path"
+    else
+        # ディレクトリ一括時
+        log_info "ワークフローディレクトリ確認: $WORKFLOW_DIR"
+        if [[ ! -d "$WORKFLOW_DIR" ]]; then
+            log_error "ディレクトリが存在しません: $WORKFLOW_DIR"
+            exit 1
+        fi
+        local json_count
+        json_count=$(find "$WORKFLOW_DIR" -maxdepth 1 -type f -name '*.json' | wc -l | tr -d ' ')
+        if [[ "$json_count" -eq 0 ]]; then
+            log_error "*.json がありません。"; exit 1
+        fi
+        log_success "${json_count} 個のJSONファイルを検出"
     fi
-    local json_count
-    json_count=$(find "$WORKFLOW_DIR" -maxdepth 1 -type f -name '*.json' | wc -l | tr -d ' ')
-    if [[ "$json_count" -eq 0 ]]; then
-        log_error "*.json がありません。"; exit 1
-    fi
-    log_success "${json_count} 個のJSONファイルを検出"
 }
 
-# ワークフローファイルをコンテナにコピー
+# ワークフローインポート
 import_workflows_cli() {
     log_info "n8n CLI によるインポート開始"
 
-    # read-only マウント (docker-compose.yaml で ./WorkFlow:/workflows:ro) を想定
-    local input_path="/workflows"
-    local cmd=(docker exec "$CONTAINER_NAME" n8n import:workflow --input "$input_path" --separate)
+    local input_path
+    local cmd
+    if [[ -n "$TARGET_FILE" ]]; then
+        # ファイル指定時
+        input_path="/workflows/$TARGET_FILE"
+        cmd=(docker exec "$CONTAINER_NAME" n8n import:workflow --input "$input_path")
+    else
+        # ディレクトリ一括時
+        input_path="/workflows"
+        cmd=(docker exec "$CONTAINER_NAME" n8n import:workflow --input "$input_path" --separate)
+    fi
     if $OVERWRITE; then
         cmd+=(--overwrite)
     fi
@@ -134,7 +161,7 @@ main() {
     parse_args "$@"
     log_info "n8n ワークフロー CLI インポート開始"
     check_docker_container
-    check_workflow_directory
+    check_workflow_target
     import_workflows_cli
     summary_message
 }

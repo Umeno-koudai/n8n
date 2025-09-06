@@ -10,8 +10,10 @@
 
 ---
 
-
-
+### インストール
+``` sh
+git clone https://github.com/Umeno-koudai/n8n.git
+```
 ### n8nの起動とワークフローの一括インポート
 ```sh
 npm run start
@@ -19,13 +21,14 @@ npm run start
 - これにより、Dockerでn8nがバックグラウンド起動し、`WorkFlow`ディレクトリ内の全ワークフローが一括インポートされます。
 - n8nのWeb UIは http://localhost:5678 でアクセスできます。
 
-### ワークフローを1件だけインポートしたい場合
+### ワークフローをインポート
 ```sh
-npm run import ファイル名.json
+//workflowディレクトリ内のワークフロー全てをインポート
+npm run import
 ```
-例:
 ```sh
-npm run import GoogleAlert.json
+//指定したファイルだけインポート
+npm run import ファイル名.json
 ```
 この場合、`WorkFlow/GoogleAlert.json` だけがインポートされます。
 

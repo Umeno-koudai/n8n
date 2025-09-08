@@ -14,12 +14,13 @@
 ``` sh
 git clone https://github.com/Umeno-koudai/n8n.git
 ```
-### n8nの起動とワークフローの一括インポート
+### n8nの起動
 ```sh
 npm run start
 ```
-- これにより、Dockerでn8nがバックグラウンド起動し、`WorkFlow`ディレクトリ内の全ワークフローが一括インポートされます。
+- これにより、Dockerでn8nがバックグラウンド起動
 - n8nのWeb UIは http://localhost:5678 でアクセスできます。
+- 起動したら[email, UserName, Password]を入力する必要がありその後ワークフローのインポートを行います。
 
 ### ワークフローをインポート
 ```sh

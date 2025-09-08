@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "docker-compose up -d && npm run import",
+    "start": "docker-compose up -d",
     "import": "chmod +x ./import_workflows.sh && ./import_workflows.sh",
     "db_reset": "docker-compose down -v && docker-compose up -d"
   },

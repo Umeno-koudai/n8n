@@ -11,6 +11,9 @@
 3. 「API キーを作成」ボタンをクリック
 4. 表示されたAPIキーをコピー
 ### n8n画面説明
+<img width="406" height="231" alt="スクリーンショット 2025-09-08 12 11 45" src="https://github.com/user-attachments/assets/d5ed6a4f-b54e-4cf3-afa9-b4e5c5e7ee8b" />
+<img width="700" height="401" alt="スクリーンショット 2025-09-08 12 28 14" src="https://github.com/user-attachments/assets/8eebf2e0-9f63-4504-a424-e02b47f2a993" />
+
 
 
 ---
@@ -24,10 +27,12 @@
 5. ページ上部「Install to Workspace」→「許可する」
 6. 「Bot User OAuth Token」（`xoxb-...`で始まる）をコピー
 ### n8n画面説明
+<img width="406" height="231" alt="スクリーンショット 2025-09-08 12 31 47" src="https://github.com/user-attachments/assets/c5c25654-fbd4-405b-996b-89a590c18ee5" />
+<img width="700" height="400" alt="スクリーンショット 2025-09-08 12 31 30" src="https://github.com/user-attachments/assets/9b29970c-c177-496d-bb44-937df27000c0" />
 
 ---
 
-## 3. Fal ai API Key の取得方法
+## 3. Fal ai API Key の取得方法(他のHTTPRequestも同じやり方)
 
 1. [Fal ai](https://fal.ai/) にアクセス
 2. 右上の「Sign in」からアカウント作成またはログイン
@@ -35,6 +40,9 @@
 4. 「Create API Key」ボタンで新規キーを発行
 5. 表示されたAPIキーをコピー
 ### n8n画面説明
+<img width="400" height="581" alt="スクリーンショット 2025-09-08 12 32 07" src="https://github.com/user-attachments/assets/862a86f4-77ce-4a7e-b91e-360125050e24" />
+<img width="1215" height="712" alt="スクリーンショット 2025-09-08 12 32 47" src="https://github.com/user-attachments/assets/0f771d6e-c98e-43c1-b90f-e688a794a262" />
+*名前に[Authorization]と入力する必要がある
 
 ---
 

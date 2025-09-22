@@ -27,7 +27,7 @@ NC='\033[0m' # No Color
 
 
 # 設定
-WORKFLOW_DIR=${WORKFLOW_DIR:-"./WorkFlow"}
+WORKFLOW_DIR=${WORKFLOW_DIR:-"./workflow"}
 CONTAINER_NAME=${N8N_CONTAINER_NAME:-"n8n_local"}
 OVERWRITE=false
 TARGET_FILE=""
@@ -163,7 +163,7 @@ main() {
     check_docker_container
     check_workflow_target
     import_workflows_cli
-    summary_message
+    #summary_message
 }
 
 main "$@"

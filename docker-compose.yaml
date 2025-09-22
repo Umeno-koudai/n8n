@@ -18,8 +18,8 @@ services:
     volumes:
       # n8nの設定データやワークフローデータを永続化するためのボリューム
       - n8n_data:/home/node/.n8n
-      # WorkFlowディレクトリをコンテナにマウント（手動インポート用）
-      - ./WorkFlow:/workflows:ro
+      # workflowディレクトリをコンテナにマウント（手動インポート用）
+      - ./workflow:/workflows:ro
     # command: ["npm", "run", "import"]
 
 volumes:

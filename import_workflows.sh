@@ -163,7 +163,7 @@ main() {
     check_docker_container
     check_workflow_target
     import_workflows_cli
-    #summary_message
+    summary_message
 }
 
 main "$@"

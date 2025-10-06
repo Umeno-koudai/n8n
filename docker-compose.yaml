@@ -11,6 +11,8 @@ services:
       - N8N_ENCRYPTION_KEY=IWKnJGOZrBTVn3MFBMebkWl+z7fp8STId17KhN20FQU=
       # タイムゾーンを日本時間に設定
       - GENERIC_TIMEZONE=Asia/Tokyo
+      # VOICEVOX エンジンの URL（コンテナ名:ポートで到達可能）
+      - VOICEVOX_ENGINE_URL=http://voicevox:50021
       # その他の設定が必要な場合はここに追加
       # 例: - N8N_EMAIL_MODE=smtp
       #     - N8N_SMTP_HOST=your_smtp_host
@@ -20,7 +22,21 @@ services:
       - n8n_data:/home/node/.n8n
       # workflowディレクトリをコンテナにマウント（手動インポート用）
       - ./workflow:/workflows:ro
+    depends_on:
+      - voicevox
     # command: ["npm", "run", "import"]
+
+  voicevox:
+    image: voicevox/voicevox_engine:latest
+    container_name: voicevox_local
+    restart: unless-stopped
+    # VOICEVOX エンジンはデフォルトで 50021 ポートで HTTP API を提供します
+    ports:
+      - "50021:50021"
+    # 必要に応じてモデルの永続化や追加の環境変数を設定してください
+    volumes:
+      - voicevox_models:/var/lib/voicevox
 
 volumes:
   n8n_data:
+  voicevox_models:

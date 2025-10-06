@@ -43,6 +43,7 @@
 <img width="400" height="581" alt="スクリーンショット 2025-09-08 12 32 07" src="https://github.com/user-attachments/assets/862a86f4-77ce-4a7e-b91e-360125050e24" />
 <img width="1215" height="712" alt="スクリーンショット 2025-09-08 12 32 47" src="https://github.com/user-attachments/assets/0f771d6e-c98e-43c1-b90f-e688a794a262" />
 *名前に[Authorization]と入力する必要がある
+*値は最初に[Key ]と入力しAPI_Keyを貼り付ける
 
 ---
 

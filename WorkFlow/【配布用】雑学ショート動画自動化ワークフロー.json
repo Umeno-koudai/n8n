@@ -1,0 +1,1982 @@
+{
+  "name": "【配布用】雑学ショート動画自動化ワークフロー",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "d47a7616-ed80-485f-aa45-ffb158d3a72c",
+      "name": "When clicking 'Test workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        2416,
+        448
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.fileId }}",
+          "mode": "id"
+        },
+        "options": {
+          "fileName": ""
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3888,
+        1360
+      ],
+      "id": "3097ca2c-5fdd-4220-8397-3e10790ac0c8",
+      "name": "Download bgm file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "XVLWcf20GUAlYrGQ",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $items('Fields - Runtime Paths1')[0].json.workDir }}/bgm/bgm.mp3",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        4032,
+        1360
+      ],
+      "id": "ea8e5bd9-74a1-4ba8-920e-267455b3ebca",
+      "name": "Write bgm file"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jdPbryRitlNSiFG0IrnqaCK6Vfq4V1YBVKgLjsKpzQI",
+          "mode": "list",
+          "cachedResultName": "ai-video-assets",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jdPbryRitlNSiFG0IrnqaCK6Vfq4V1YBVKgLjsKpzQI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1646851098,
+          "mode": "list",
+          "cachedResultName": "BGM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jdPbryRitlNSiFG0IrnqaCK6Vfq4V1YBVKgLjsKpzQI/edit#gid=1646851098"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "key",
+              "lookupValue": "default"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        3744,
+        1360
+      ],
+      "id": "89122846-1147-4897-8c42-a9ae2c0df997",
+      "name": "get bgm id",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aPQw5MjyH0UWHOLA",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## ２｜台本作成",
+        "height": 304,
+        "width": 1072,
+        "color": 5
+      },
+      "id": "5e3fb02b-2922-453d-aacf-b06a900459e5",
+      "name": "Sticky Note33",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2960,
+        336
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## ３｜音声生成",
+        "height": 304,
+        "width": 908,
+        "color": 4
+      },
+      "id": "818e8819-bd9c-4724-bfa2-4a61a179479a",
+      "name": "Sticky Note34",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4048,
+        336
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6b5b5d77-fd3d-497c-82e5-99fc74f53efb",
+              "name": "Idea",
+              "type": "string",
+              "value": "クスッと笑える雑学"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6e2402b4-7cef-4a32-a51f-eac1aecd994c",
+      "name": "Fields - Set Idea1",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2768,
+        448
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "baseDir",
+              "type": "string",
+              "value": "={{$env.TEMP ? $env.TEMP + '/ai-edit/' + $execution.id : '/tmp/ai-edit/' + $execution.id}}",
+              "id": "389c863d-7da3-4e0c-8102-aa52cfd9be98"
+            },
+            {
+              "name": "runId",
+              "type": "string",
+              "value": "={{ $execution.id }}",
+              "id": "8876302c-e2b3-4271-9c90-ded15527fd0c"
+            },
+            {
+              "id": "255d514f-e0eb-4167-a4b2-702977c9ee7e",
+              "name": "workDir",
+              "value": "=/tmp/ai-video/{{$execution.id}}",
+              "type": "string"
+            },
+            {
+              "id": "5f76d032-e9b9-4bbe-80d1-dbcff2cd1996",
+              "name": "projectRoot",
+              "value": "ai-video",
+              "type": "string"
+            },
+            {
+              "id": "afbc520a-dca4-4889-8038-a2415a132473",
+              "name": "voicevoxBaseUrl",
+              "value": "http://127.0.0.1:50021",
+              "type": "string"
+            },
+            {
+              "id": "df0e28bb-bd9f-40bd-aa95-5c771d637441",
+              "name": "voicevoxSpeakerId",
+              "value": "13",
+              "type": "string"
+            },
+            {
+              "id": "f5819816-ffee-49b6-a948-c1c7eb5414f5",
+              "name": "enableInterrogative",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0911013f-7315-446d-ae41-62d03a521d77",
+      "name": "Fields - Runtime Paths1",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2592,
+        448
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "content": "## １｜アイデア入力",
+        "height": 304,
+        "width": 592,
+        "color": 7
+      },
+      "id": "02d38568-169f-47e9-820f-2e1fd60f6a19",
+      "name": "Sticky Note35",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2352,
+        336
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "model": "gpt-image-1",
+        "prompt": "=下記の情報を元に縦型の画像を生成してください。TikTokなどショート動画で使用します：\n** いらすとや ** 風の画風で作成して。\n** 画像に文字入れないで **\n## スタイル指示書：\n~~~\n {{ $json.message.content }}\n~~~",
+        "options": {
+          "quality": "low",
+          "size": "1024x1536"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        4496,
+        784
+      ],
+      "id": "6948b6c6-5439-4fed-904e-b5979757286b",
+      "name": "Generate an image1",
+      "credentials": {
+        "openAiApi": {
+          "id": "xwubyP9KuiIKwXbV",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-nano",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-NANO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=誰もが興味をそそられる面白い雑学を紹介するInstagramリールやTikTokショート動画用の台本を作成してください。具体的な台本テーマは下記であらためて共有する\n\n構成:\n1. 注目を集めるオープニング (5秒)\n- ユーザー入力で与えられたタイトルを読み上げるのみ。他は何もせず、2に移る\n\n2. 雑学紹介 (各10秒、合計30秒)\n- 3~4つの雑学をテンポよく紹介\n- 科学に関する雑学は、十分な裏付けのある、信頼性の高いもののみを扱う\n\n注意点:\n- 以下の例と全く同じ文量・構成・口調で台本を作成すること。特に常体を使用し、頻繁に句読点を使うこと\n- **紹介時、一つのトピックにつき日本語50-80文字とする**\n\n例:\n9割の人が知らない雑学。\n\n人間の脳は、自分の声を聞くと、実際よりも低く感じる。 これは、頭蓋骨を通して伝わる振動が原因。 だから録音した自分の声を聞くと、違和感を覚えるんだ。\n\n地球の自転は、少しずつ遅くなっている。 14億年前は、1日が19時間だった。 この変化は、月の引力による潮汐摩擦が主な原因だ。\n\nアマゾンの「A」から「Z」までの矢印は、Aから Zまで全ての商品を扱っているという意味だ。 よく見ると、笑顔の形にもなっている。\n\n宇宙には「水蒸気の雲」が存在する。 その中で最大のものは、地球の全海水の140兆倍もの水を含んでいる。\n\nコアラは指紋を持っている。 しかも、人間の指紋と非常によく似ているんだ。 犯罪捜査で間違えられたことがあるくらい。\n\nエッフェル塔は、夏になると最大で15センチメートル背が高くなる。 これは、金属が熱で膨張するためだ。\n\n~~~~~\n元の台本の表現は忠実に維持して、言い回しなど含めて文章の改変は絶対しないで。\n説明文・コードフェンス・コメントを含めてはいけません。",
+              "role": "system"
+            },
+            {
+              "content": "=# 生成ルール:\n- 出力はコメントを含まない純JSON。コードフェンス(``` )や説明文は入れない。\n- scenes は必ず3~6項目。各要素に title と body を含める。\n- 語彙は一般向け。誹謗中傷・差別表現は避ける。固有名詞は一般例に留める。\n\n# 出力フォーマット（この形だけ返す）\n{\n  \"title\": \"string\",\n  \"scenes\": [\n    {\n      \"title\": \"string\",\n      \"body\": \"string\"\n    }\n  ],\n}\n\n# 作成のコツ:\n- タイトル: 一覧系なら「◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯5選」のように数を明示。\n- シーンタイトル: 具体的な組み合わせや特徴が一目で伝わる対比表現を使う。\n- 本文(body): 1〜3行で完結。1行=15〜25字程度。リズムを出す。\n- 全体トーン: カジュアルで前向き。断定しすぎず一般性を意識。\n\n\n# 実際の例\n{\n  \"title\": \"よく見るカップルの組み合わせ5選\",\n  \"scenes\": [\n    {\n      \"title\": \"無口で落ち着いた彼氏と感情豊かでよく喋る彼女\",\n      \"body\": \"話すのが好きじゃない彼女と\\n聞くのが苦じゃない彼\\n役割が自然にハマっている\"\n    },\n…\n}\n\n# 対象のテーマ：\n{{ $('Fields - Set Idea1').item.json.Idea }}"
+            },
+            {}
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        3024,
+        448
+      ],
+      "id": "599cbc40-abb9-4642-96b7-8da5fedfc8d7",
+      "name": "PlanJSON生成1",
+      "alwaysOutputData": false,
+      "retryOnFail": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "xwubyP9KuiIKwXbV",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "scenes",
+        "include": "allOtherFields",
+        "options": {
+          "destinationFieldName": "scene"
+        }
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        3520,
+        448
+      ],
+      "id": "4ad4e5fd-b8a3-405e-8f9e-0d12894ebcc2",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-nano",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-NANO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=画像を生成するための構図やスタイルを指定したプロンプトを作ります。\nいらすとや風のスタイルで、プロンプトをスタイルしてください",
+              "role": "system"
+            },
+            {
+              "content": "=あなたは「動画用の画像プロンプト設計家」です。\n入力のシーン情報（タイトルと本文）を、被写体・場所/時間帯・行動・感情・構図・ライティング・色調の語彙に変換し、\n画像を生成するためのプロンプトを作ってください。\n\n## 入力\n{{ $('concat text1').item.json.tts_text }}\n\n## ルール\n- 直接的な形容（例: 無口/よく喋る）は、表情・ジェスチャー・姿勢に置換する。\n- 実在アーティスト名や文字要素は使わない（文字・ロゴは negative で抑制）。\n- 構図は1語で明示（例: close-up / medium shot / two-shot / over-the-shoulder）。\n- 余計な説明やコードブロック、コメントは禁止。日本語で出力すること。"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        4224,
+        784
+      ],
+      "id": "330c963c-1508-4605-8ff3-af569f657e21",
+      "name": "Generate an image Prompt1",
+      "retryOnFail": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "xwubyP9KuiIKwXbV",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "operation": "speechToText",
+        "additionalOptions": {},
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        2560,
+        784
+      ],
+      "id": "664ad865-24e3-48df-90da-5305df02c1b3",
+      "name": "Transcribe audio or video1",
+      "retryOnFail": true,
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "1jKBnxSl3zHTDJjE",
+          "name": "ElevenLabs account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3328,
+        784
+      ],
+      "id": "0e8fa99c-bc46-48a7-a12a-d44162f0e9a7",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=あなたは日本語の字幕レイアウトアシスタントです。任務は「原文テキストの改行（行分割）とページング（画面切替）だけ」を決めること。\n禁止:\n- 原文の文字を変更しない（削除・追加・置換・要約・正規化NG）。空白のみ削除可。\n- 説明文やマークダウン、コードフェンスを出力しない。JSONのみ。\n厳守（TikTok想定）:\n- 1行=全角11文字以内\n- TikTokの動画でテンポが重要なので、一回のページングで表示文章を長くしない\n- 1ページ最大2行\n- 句読点（。！？、）や意味の塊で優先的に改行。行頭禁則（、。！？：；）」』）を避ける。括弧・引用符（「」『』（）“”）は可能な限り同一ページに収める\nチェック:\n- すべてのページの行を連結し、空白を除去した文字列が、入力原文（空白除去済）と完全一致していること。\n- 時間・インデックス・ノート等の余計なフィールドは出さない。",
+              "role": "system"
+            },
+            {
+              "content": "=縦型動画テロップとして“見やすい改行（行分割）とページング”を決めてください。JSONのみで返答。\n\n【原文】\n{{ $('Transcribe audio or video1').item.json.text }}\n\n【ルール（厳守）】\n1) 行長（CPL）: 1行=全角11以内\n2) 行数: 1ページ最大2行\n3) TikTokの動画でテンポが重要なので、一回のページングで表示文章を長くしない\n4) 句読点は削除すること\n5) テキスト不変: 原文の文字を変更しない（空白のみ削除可）\n6) 出力は次のJSONスキーマに厳密一致（追加フィールド不可）\n\n【出力スキーマ（厳守/追加禁止）】\n{\n  \"pages\": [\n    { \"lines\": [\"string\", \"string?\"] }\n  ]\n}\n\n視覚的に最適化された、日本語で違和感のない表示に整えて提案してください。"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2880,
+        784
+      ],
+      "id": "94a24166-4f14-48d2-9d8c-bf96085568e4",
+      "name": "Paging1",
+      "retryOnFail": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "xwubyP9KuiIKwXbV",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1jdPbryRitlNSiFG0IrnqaCK6Vfq4V1YBVKgLjsKpzQI",
+          "mode": "list",
+          "cachedResultName": "ai-video-assets",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jdPbryRitlNSiFG0IrnqaCK6Vfq4V1YBVKgLjsKpzQI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Scenes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jdPbryRitlNSiFG0IrnqaCK6Vfq4V1YBVKgLjsKpzQI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "key": "={{ $('Fields - Runtime Paths1').item.json.runId }}_{{ $('set scene index1').item.json.scene_index.toString().padStart(3,'0') }}",
+            "sceneIndex": "={{ $('set scene index1').item.json.scene_index }}",
+            "ttsText": "={{ $('set scene index1').item.json.tts_text }}",
+            "srtFileId": "={{ $('Upload srt file1').item.json.id }}",
+            "audioFileId": "={{ $('Upload audio file1').item.json.id }}",
+            "runId": "={{ $('Fields - Runtime Paths1').item.json.runId }}",
+            "imageFileId": "={{ $('Upload image file1').item.json.id }}"
+          },
+          "matchingColumns": [
+            "key"
+          ],
+          "schema": [
+            {
+              "id": "key",
+              "displayName": "key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "runId",
+              "displayName": "runId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sceneIndex",
+              "displayName": "sceneIndex",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ttsText",
+              "displayName": "ttsText",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "audioFileId",
+              "displayName": "audioFileId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "srtFileId",
+              "displayName": "srtFileId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "imageFileId",
+              "displayName": "imageFileId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        2416,
+        1136
+      ],
+      "id": "52bbb620-7ed4-416f-b779-9b2e4dc5eb28",
+      "name": "Append or update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aPQw5MjyH0UWHOLA",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "=scene_{{ $(\"set scene index1\").first().json.scene_index.toString().padStart(3,'0') }}.wav",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1EMujoeL7cU6ERA7fswccdpz261nKaKfM",
+          "mode": "list",
+          "cachedResultName": "audio",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1EMujoeL7cU6ERA7fswccdpz261nKaKfM"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        4448,
+        448
+      ],
+      "id": "14d7d441-159f-4741-bfb6-c12be045174e",
+      "name": "Upload audio file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "XVLWcf20GUAlYrGQ",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "09df9594-5273-4073-adf1-7cdd05d4d26c",
+              "name": "words",
+              "value": "={{ (() => {      const r = Array.isArray($json) ? $json[0] : $json;      return r?.words ?? r?.data?.words ?? [];    })() }}",
+              "type": "array"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2720,
+        784
+      ],
+      "id": "da469e69-8a58-4ee9-99e3-2f5b84d9a362",
+      "name": "get words timestamp1"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// 各アイテムモードでは $json は「その1件分のJSON」\nconst c = $json?.choices?.[0]?.message?.content;\nlet pages;\n\nif (c && typeof c === 'object') {\n  // Structured Outputs のとき\n  pages = Array.isArray(c.pages) ? c.pages : c;\n} else if (typeof c === 'string') {\n  // content が JSON文字列のとき\n  try {\n    const obj = JSON.parse(c);\n    pages = Array.isArray(obj.pages) ? obj.pages : obj;\n  } catch {\n    throw new Error('content is string but not valid JSON');\n  }\n}\n\nif (!Array.isArray(pages)) {\n  throw new Error('pages is not an array. Inspect content shape.');\n}\n\n// ★ 各アイテムにつき「単一オブジェクト」を返す（配列で返さない）\nreturn {\n  json: { ...$json, pages },\n  binary: $input.item.binary, // バイナリをパススルー（不要なら削ってOK）\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3152,
+        784
+      ],
+      "id": "9c330359-d9ff-416c-815f-293d946be214",
+      "name": "get pages1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e51dd193-e7a9-4047-b788-c39f50262ec3",
+              "name": "scene_index",
+              "value": "={{ $itemIndex + 1 }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3888,
+        448
+      ],
+      "id": "c4d56768-2e65-4231-9a51-3b99ce4e6c02",
+      "name": "set scene index1"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// ---- 設定 ----\nconst MIN_DUR = 0.9;     // 各キュー最短秒\nconst MAX_DUR = 6.0;     // 各キュー最長秒\nconst WS = /[\\u0009-\\u000D\\u0020\\u00A0\\u3000]/g;\n\nfunction srtTime(sec){\n  const ms = Math.max(0, Math.round(sec*1000));\n  const h  = String(Math.floor(ms/3600000)).padStart(2,'0');\n  const m  = String(Math.floor((ms%3600000)/60000)).padStart(2,'0');\n  const s  = String(Math.floor((ms%60000)/1000)).padStart(2,'0');\n  const u  = String(ms%1000).padStart(3,'0');\n  return `${h}:${m}:${s},${u}`;\n}\n\n// ---- 入力（このノードは各アイテムで1回ずつ呼ばれる）----\nconst pages = $json.pages;\nconst words = $json.words;\nif (!Array.isArray(pages) || !pages.length) throw new Error('pages empty');\nif (!Array.isArray(words) || !words.length) throw new Error('words empty');\n\n// ---- 単語→文字トークン化 ----\nconst tokAll = [];\nfor (const w of words) {\n  const t = String(w.text ?? '');\n  if (!t) continue;\n  if (t.length === 1) {\n    tokAll.push({ ch: t, start: +w.start, end: +w.end });\n  } else {\n    const dur = (+w.end) - (+w.start);\n    const step = dur / t.length;\n    for (let i = 0; i < t.length; i++) {\n      tokAll.push({\n        ch: t[i],\n        start: +w.start + i * step,\n        end:   (i === t.length - 1) ? +w.end : (+w.start + (i + 1) * step),\n      });\n    }\n  }\n}\nconst TOK = tokAll.filter(t => !WS.test(t.ch));\nconst N   = TOK.length;\n\nlet cursor = 0;\nlet lastEnd = N ? TOK[0].start : 0;\n\nconst LOOK = 60;\nfunction matchNorm(norm){\n  let s=null, e=null, pos=cursor;\n  for (const ch of Array.from(norm)){\n    let f=-1;\n    for (let k=pos; k<Math.min(pos+LOOK, N); k++){\n      if (TOK[k].ch === ch){ f=k; break; }\n    }\n    if (f<0) return null;\n    if (s===null) s=f; e=f; pos=f+1;\n  }\n  return { s, e, next: e+1 };\n}\nfunction sliceByLength(len){\n  if (cursor >= N) {\n    const start = lastEnd;\n    const end   = start + Math.max(MIN_DUR, Math.min(MAX_DUR, len*0.25));\n    lastEnd = end;\n    return { start, end, synthetic:true };\n  }\n  const s = cursor;\n  const e = Math.min(cursor + Math.max(1,len) - 1, N-1);\n  cursor = e + 1;\n  const start = TOK[s].start;\n  const end   = TOK[e].end;\n  lastEnd = Math.max(lastEnd, end);\n  return { start, end, synthetic:false };\n}\n\n// ---- 行→タイム付与 ----\nconst flat = [];\npages.forEach((p,pi)=> (p.lines||[]).forEach((ln)=>{\n  const raw = String(ln);\n  const norm = raw.replace(WS, '');\n  if (norm) flat.push({pi, raw, norm});\n}));\n\nconst lineTimed=[];\nfor (const it of flat){\n  const m = matchNorm(it.norm);\n  let start, end, dur;\n  if (m){\n    cursor = m.next;\n    start = TOK[m.s].start;\n    end   = TOK[m.e].end;\n  } else {\n    const len = Array.from(it.norm).length;\n    const fb  = sliceByLength(len);\n    start = fb.start; end = fb.end;\n  }\n  dur = end - start;\n  if (dur < MIN_DUR) end = start + MIN_DUR;\n  if (dur > MAX_DUR) end = start + MAX_DUR;\n  lastEnd = Math.max(lastEnd, end);\n  lineTimed.push({ pageIndex: it.pi, text: it.raw, start, end });\n}\n\n// ---- ページごとにまとめて SRT 文字列に ----\nconst pagesWithTimes = pages.map((p,pi)=>{\n  const members = lineTimed.filter(l=>l.pageIndex===pi);\n  if (!members.length) return { id:pi+1, start:lastEnd, end:lastEnd+MIN_DUR, lines:p.lines||[] };\n  let start = Math.min(...members.map(m=>m.start));\n  let end   = Math.max(...members.map(m=>m.end));\n  const dur = end - start;\n  if (dur < MIN_DUR) end = start + MIN_DUR;\n  if (dur > MAX_DUR) end = start + MAX_DUR;\n  return { id:pi+1, start, end, lines:p.lines||[] };\n});\n\nlet seq=1, srt='';\nfor (const pg of pagesWithTimes){\n  srt += `${seq}\\n${srtTime(pg.start)} --> ${srtTime(pg.end)}\\n${(pg.lines||[]).join('\\n')}\\n\\n`;\n  seq++;\n}\n\n// ---- ファイル名（3桁統一） ----\nconst sceneIdx = Number($json.scene_index ?? $json.sceneIndex ?? 1);\nconst scenePadded = String(sceneIdx).padStart(3,'0');\nconst srtFileName = `scene_${scenePadded}.srt`;\n\n// ★ 各アイテムにつき 1 オブジェクトで返す（配列NG）\nreturn {\n  json: {\n    ...$json,\n    srt,\n    srtFileName,\n    scenePadded, // 下流のファイル名式で便利\n  },\n  // SRT作成にはバイナリ不要。どうしても残したい場合のみ下を有効化\n  // binary: $input.item.binary\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3488,
+        784
+      ],
+      "id": "3ece73ee-ff06-421f-bfd5-9d1d4eb71705",
+      "name": "Write srt1"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "srt",
+        "options": {
+          "fileName": "=scene_{{ $(\"set scene index1\").first().json.scene_index.toString().padStart(3,'0') }}.srt"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        3792,
+        784
+      ],
+      "id": "5f56ebf0-09da-439f-a814-0eb096327acc",
+      "name": "Covert srt File1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2687998b-b80a-4e02-bbfb-b0772a07ebec",
+              "name": "tts_text",
+              "value": "={{ $json.scene.title + \"\\n\" + $json.scene.body }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3712,
+        448
+      ],
+      "id": "8b91bdcc-ff5c-4b3d-836b-051f94033c5c",
+      "name": "concat text1"
+    },
+    {
+      "parameters": {
+        "name": "=scene_{{ $(\"set scene index1\").first().json.scene_index.toString().padStart(3,'0') }}.png",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "10ZKAiZSU86yHA8qdqKz-8OLIo008i3hM",
+          "mode": "list",
+          "cachedResultName": "images",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/10ZKAiZSU86yHA8qdqKz-8OLIo008i3hM"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        4640,
+        784
+      ],
+      "id": "f5617627-08ce-4aa6-a56c-a82dd2bb3f04",
+      "name": "Upload image file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "XVLWcf20GUAlYrGQ",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "98ca04c4-bc12-4093-8a9f-94d234c3db8d",
+              "name": "image_fileId",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4784,
+        784
+      ],
+      "id": "f73c7ac4-4b8a-499e-8986-b4099cf74cd4",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d5dcbe59-aece-4443-a09d-295062d11170",
+              "name": "audio_fileId",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4608,
+        448
+      ],
+      "id": "b81d7b27-def6-424e-ae45-83c67535dba6",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2416,
+        784
+      ],
+      "id": "e041ef3d-086f-494a-9772-2fe3718e1b41",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "XVLWcf20GUAlYrGQ",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ✅ Mode: Run once for all items\n// 入力は直前の“複数アイテム”\n// 参照ノード名はあなたの実体に合わせて変更（例: \"Fields - Runtime Paths\"）\nconst rv = ($items('Fields - Runtime Paths1')[0]?.json) ?? ($items('Run Vars')[0]?.json) ?? {};\n\nconst runId  = String(rv.runId ?? '');\nconst sheetUrl = String(rv.sheetUrl ?? '');\nconst workDir  = String(rv.workDir ?? (runId ? `/tmp/ai-video/${runId}` : ''));\nconst outputFolderUrl = String(rv.outputFolderUrl ?? '');\n\nconst itemsProcessed = $input.all().length;\n\nreturn [{\n  json: { runId, sheetUrl, workDir, outputFolderUrl, itemsProcessed }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2576,
+        1136
+      ],
+      "id": "cbc9bd42-e908-41dd-a9ca-f003db00c7d4",
+      "name": "aggregater1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jdPbryRitlNSiFG0IrnqaCK6Vfq4V1YBVKgLjsKpzQI",
+          "mode": "list",
+          "cachedResultName": "ai-video-assets",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jdPbryRitlNSiFG0IrnqaCK6Vfq4V1YBVKgLjsKpzQI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Scenes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jdPbryRitlNSiFG0IrnqaCK6Vfq4V1YBVKgLjsKpzQI/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        2944,
+        1136
+      ],
+      "id": "1f1b0163-a9f7-431b-93b3-33eafc9902d6",
+      "name": "get video data1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aPQw5MjyH0UWHOLA",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 入力: Sheets の全行（複数アイテム）\nconst runId = String($execution.id); // ← 実行ID（Codeノードで利用可）\nconst rows = $input.all().map(i => i.json);\n\nconst scenes = rows\n  .filter(r => String(r.runId) === runId)\n  // 素材がまだ空の行を弾くなら次行を残す。暫定で画像が空でも進めるなら imageFileId 条件は外す\n  .filter(r => r.audioFileId && r.srtFileId && r.imageFileId)\n  .sort((a,b) => Number(a.sceneIndex) - Number(b.sceneIndex));\n\nreturn scenes.map(r => ({ json: r }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        1136
+      ],
+      "id": "36aa9459-3bdd-402f-924c-6ee3a4a0ec6f",
+      "name": "get video items1"
+    },
+    {
+      "parameters": {
+        "command": "=DIR=\"{{ $(\"Fields - Runtime Paths1\").first().json.workDir }}\"\nmkdir -p \"$DIR/images\" \"$DIR/srt\" \"$DIR/audio\" \"$DIR/scenes\" \"$DIR/bgm\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        2752,
+        1136
+      ],
+      "id": "853be53b-9979-4b05-a70b-bd8bc18676d5",
+      "name": "Execute Command1"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('get video items1').item.json.audioFileId }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3296,
+        1136
+      ],
+      "id": "ad70e0f1-9e82-423e-8496-e9e8bfde3475",
+      "name": "Download audio1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "XVLWcf20GUAlYrGQ",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $items('Fields - Runtime Paths1')[0].json.workDir }}/audio/scene_{{ String($json.sceneIndex).padStart(3,'0') }}.wav",
+        "options": {
+          "append": false
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        3456,
+        1136
+      ],
+      "id": "0779c1ff-95d4-47db-827b-d9274577b7b2",
+      "name": "Write audio file1"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('get video items1').item.json.srtFileId }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3632,
+        1136
+      ],
+      "id": "4934507f-7b8e-4b10-9d61-5984eb84244e",
+      "name": "Download srt1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "XVLWcf20GUAlYrGQ",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $items('Fields - Runtime Paths1')[0].json.workDir }}/srt/scene_{{ String($json.sceneIndex).padStart(3,'0') }}.srt",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        3792,
+        1136
+      ],
+      "id": "c48c927f-94c7-4a91-8dd6-52f2d7203a25",
+      "name": "Write srt file1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const workDir = $('Fields - Runtime Paths1').first().json.workDir;\nconst rows = $input.all().map(i => i.json);\nconst lines = rows\n  .map(r => `file 'scenes/scene_${String(r.sceneIndex).padStart(3,'0')}.mp4'`)\n  .join('\\n') + '\\n';\n\nconst listPath = `${workDir}/list.txt`;\nconst outPath  = `${workDir}/output.mp4`;\nconst listDir  = listPath.split('/').slice(0,-1).join('/'); // ← dirname 相当\n\nreturn [{ json: { listText: lines, listPath, outPath, listDir } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3296,
+        1360
+      ],
+      "id": "da28c0cf-eb36-4f7b-8572-6e46682b55cb",
+      "name": "create list.txt1"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "listText",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        3456,
+        1360
+      ],
+      "id": "0f07cf6c-0f21-4cc1-90ba-9b1acf35456a",
+      "name": "Convert to File1"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "useDataOfInput": 2
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4208,
+        1360
+      ],
+      "id": "6641e223-3a51-4d7e-9698-3e6efbac1df2",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "command": "=LIST=\"{{ $json.listPath }}\"; \nOUT=\"{{ $json.outPath }}\";\nDIR=\"{{ $('Fields - Runtime Paths1').first().json.workDir }}\"\nBGM=\"$DIR/bgm/bgm.mp3\";\n\nBGMVOL=\"{{ (parseFloat(String($items('get bgm id')[0].json.volume ?? '0.15').replace(',', '.')) || 0.15) }}\";\n\nif [ ! -f \"$BGM\" ]; then\n  echo \"[WARN] BGM not found. Fallback to copy.\"\n  ffmpeg -hide_banner -loglevel error -y \\\n    -f concat -safe 0 -i \"$LIST\" \\\n    -c copy -movflags +faststart \"$OUT\"\n  exit $?\nfi\n\nffmpeg -hide_banner -loglevel error -y \\\n  -f concat -safe 0 -i \"$LIST\" \\\n  -stream_loop -1 -i \"$BGM\" \\\n  -filter_complex \"\\\n    [1:a]volume=${BGMVOL},\\\n         aformat=sample_fmts=fltp:sample_rates=48000:channel_layouts=stereo[bg];\\\n    [0:a][bg]amix=inputs=2:duration=first:dropout_transition=3[a]\" \\\n  -map 0:v -map \"[a]\" \\\n  -c:v copy \\\n  -c:a aac -b:a 160k \\\n  -movflags +faststart -shortest \\\n  \"$OUT\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        4496,
+        1360
+      ],
+      "id": "3ed3ea50-d2b6-45fd-9453-3aa42cd2b97e",
+      "name": "concat demuxer1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Fields - Runtime Paths1').item.json.voicevoxBaseUrl }}/synthesis",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "speaker",
+              "value": "={{$('Fields - Runtime Paths1').item.json.voicevoxSpeakerId}}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4288,
+        448
+      ],
+      "id": "66fa077a-05b7-4ecf-b532-f4f505d21c43",
+      "name": "VOICEVOX /synthesis Request1"
+    },
+    {
+      "parameters": {
+        "name": "=scene_{{ $(\"set scene index1\").first().json.scene_index.toString().padStart(3,'0') }}.srt",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1WgPF-SnYMZWcEVH5KjQRC4A5jHyhCEcB",
+          "mode": "list",
+          "cachedResultName": "srt",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1WgPF-SnYMZWcEVH5KjQRC4A5jHyhCEcB"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3936,
+        784
+      ],
+      "id": "7c25da6d-a6c3-44e7-bd74-a74cda33fa6e",
+      "name": "Upload srt file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "XVLWcf20GUAlYrGQ",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa32efd0-d4cf-4ec5-8cb2-9fb62dd47add",
+              "name": "srt_fileId",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4080,
+        784
+      ],
+      "id": "02c72d36-04e9-434a-ba5f-c18a3ca3aa8a",
+      "name": "set srt file id1"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $('Code2').item.json.outPath }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        4640,
+        1360
+      ],
+      "id": "09fa3fe7-f13f-4476-9bf6-6ca224757f00",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $('create list.txt1').item.json.listPath }}",
+        "options": {
+          "append": false
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        3600,
+        1360
+      ],
+      "id": "3373c310-7f3e-46d5-a45a-f09fdde86756",
+      "name": "Read/Write Files from Disk3"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "scenes",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        4784,
+        1136
+      ],
+      "id": "2e2d6d6f-666b-4812-ae1d-9bc2e1489901",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const c = $('create list.txt1').first().json;\nconst listPath = c.listPath;\nconst outPath  = c.outPath;\nconst workDir  = listPath.split('/').slice(0,-1).join('/');\nreturn [{ json: { listPath, outPath, workDir } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4352,
+        1360
+      ],
+      "id": "fbf28402-7859-40d1-9c1f-514cd6689b3a",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1mQ6ZU4vSTNVeVBOPeCEW3-ykUEeG_UmL",
+          "mode": "list",
+          "cachedResultName": "output",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1mQ6ZU4vSTNVeVBOPeCEW3-ykUEeG_UmL"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        4784,
+        1360
+      ],
+      "id": "2d37a83b-be23-427e-a0e0-dc228294c884",
+      "name": "Upload file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "XVLWcf20GUAlYrGQ",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const FPS = 30, FRAME = 1000 / FPS;   // 33.333…\nconst MIN_GAP = 66;                    // 2 frames\nconst MIN_DUR = 600;                   // 読みやすさ基準。700でもOK\n\nconst floorF = ms => Math.floor(ms / FRAME) * FRAME;\nconst ceilF  = ms => Math.ceil(ms / FRAME) * FRAME;\n\nlet prevEnd = -1e9;\nconst parseMs = t => { const m=t.match(/(\\d{2}):(\\d{2}):(\\d{2}),(\\d{3})/); return ((+m[1]*3600 + +m[2]*60 + +m[3])*1000)+ +m[4]; };\nconst fmt = ms => { ms=Math.max(0,Math.round(ms)); const h=Math.floor(ms/3600000); ms%=3600000; const m=Math.floor(ms/60000); ms%=60000; const s=Math.floor(ms/1000); const ms3=ms%1000; return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')},${String(ms3).padStart(3,'0')}`; };\n\nconst raw = $json.srt || $json.text || $json.data;\nlet out=[], idx=1, fixedOverlap=0, shortDur=0;\nfor (const block of String(raw).trim().split(/\\r?\\n\\r?\\n/)) {\n  const lines = block.split(/\\r?\\n/);\n  let i = /^\\d+$/.test(lines[0]) ? 1 : 0;\n  const m = lines[i]?.match(/(\\d{2}:\\d{2}:\\d{2},\\d{3})\\s*-->\\s*(\\d{2}:\\d{2}:\\d{2},\\d{3})/);\n  if (!m) continue;\n\n  let start = floorF(parseMs(m[1]));\n  let end   = ceilF(parseMs(m[2]));\n\n  // ギャップ制約\n  const needStart = prevEnd + MIN_GAP;\n  if (start < needStart) { start = ceilF(needStart); fixedOverlap++; }\n\n  // 最小長制約\n  const needEnd = start + MIN_DUR;\n  if (end < needEnd) { end = ceilF(needEnd); shortDur++; }\n\n  // 最終の安全丸め（縮ませない）\n  start = floorF(start);\n  end   = ceilF(end);\n\n  prevEnd = end;\n  const text = lines.slice(i+1).join('\\n').replace(/\\{\\\\an\\d\\}|\\{\\\\pos\\([^)]*\\)\\}/g,'').trim();\n  out.push(`${idx++}\\n${fmt(start)} --> ${fmt(end)}\\n${text}`);\n}\n\nreturn { json: { ...$json, srt: out.join('\\n\\n'), srtStats: { fixedOverlap, shortDur } } };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3648,
+        784
+      ],
+      "id": "86196d17-35f3-4c5b-acfd-33086f24a37d",
+      "name": "align timestamp1"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('get video items1').item.json.imageFileId }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3952,
+        1136
+      ],
+      "id": "ca48a8dc-310a-4e53-9b45-572121bcd2d9",
+      "name": "Download image1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "XVLWcf20GUAlYrGQ",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $items('Fields - Runtime Paths1')[0].json.workDir }}/images/scene_{{ String($json.sceneIndex).padStart(3,'0') }}.png",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        4112,
+        1136
+      ],
+      "id": "df8324bc-25ef-4388-971b-5769056b1237",
+      "name": "Write image file1"
+    },
+    {
+      "parameters": {
+        "executeOnce": false,
+        "command": "=SCENE=$(printf \"%03d\" {{ $json.sceneIndex }});\nDIR=\"{{ $(\"Fields - Runtime Paths1\").first().json.workDir }}\"\nffmpeg -y -sub_charenc UTF-8 \\\n  -i \"$DIR/srt/scene_${SCENE}.srt\" \\\n  \"$DIR/srt/scene_${SCENE}.ass\"\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        4352,
+        1136
+      ],
+      "id": "de70ff94-a652-4ee6-8e41-9222b379b59f",
+      "name": "create ass1"
+    },
+    {
+      "parameters": {
+        "executeOnce": false,
+        "command": "=SCENE=$(printf \"%03d\" {{ $('Write image file1').item.json.sceneIndex }});\nDIR=\"{{ $(\"Fields - Runtime Paths1\").first().json.workDir }}\"\nASS=\"$DIR/srt/scene_${SCENE}.ass\"\nTMP=\"$DIR/srt/scene_${SCENE}.tmp.ass\"\n\nFONT_NAME=\"Noto Sans JP\"\nFONT_SIZE=100\nOUTLINE=8\nSHADOW=0\nALIGN=8\nMARGIN_V=200\nMARGIN_L=30\nMARGIN_R=30\nPRI=\"&H00FFFFFF\"\nOUT=\"&H00000000\"\n\n# [Events] 以降を抽出（CR除去）\nawk 'BEGIN{p=0} /^\\[Events\\]/{p=1} p{print}' \"$ASS\" | sed 's/\\r$//' > \"$DIR/srt/events_${SCENE}.ass\"\n\n# 固定ヘッダ＋スタイル\ncat > \"$TMP\" <<EOF\n[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\nWrapStyle: 2\nScaledBorderAndShadow: yes\n\n[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\nStyle: Default,${FONT_NAME},${FONT_SIZE},${PRI},&H00000000,${OUT},&H00000000,1,0,0,0,100,100,0,0,1,${OUTLINE},${SHADOW},${ALIGN},${MARGIN_L},${MARGIN_R},${MARGIN_V},1\n\nEOF\n\n# [Events] セクション連結\ncat \"$DIR/srt/events_${SCENE}.ass\" >> \"$TMP\"\nmv \"$TMP\" \"$ASS\"\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        4496,
+        1136
+      ],
+      "id": "bdbf86b9-f5bf-4562-b4d5-52febc0a0237",
+      "name": "ass header set1"
+    },
+    {
+      "parameters": {
+        "executeOnce": false,
+        "command": "=SCENE=$(printf \"%03d\" {{ $('Write image file1').item.json.sceneIndex }})\nDIR=\"{{ $('Fields - Runtime Paths1').first().json.workDir }}\"\nASS=\"$DIR/srt/scene_${SCENE}.ass\"\n\nffmpeg -hide_banner -loglevel verbose -y \\\n  -loop 1 -framerate 30 -i \"$DIR/images/scene_${SCENE}.png\" \\\n  -i \"$DIR/audio/scene_${SCENE}.wav\" \\\n  -filter_complex \"[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1[vbg];[vbg]ass=${ASS}:fontsdir=${DIR}/assets/fonts:original_size=1080x1920[v]\" \\\n  -map \"[v]\" -map 1:a -r 30 \\\n  -c:v libx264 -pix_fmt yuv420p \\\n  -c:a aac -ar 48000 -b:a 160k \\\n  -movflags +faststart -shortest -metadata:s:v:0 rotate=0 \\\n  \"$DIR/scenes/scene_${SCENE}.mp4\"\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        4640,
+        1136
+      ],
+      "id": "72ff77d4-ca32-4e47-817f-9cbf95f74dc4",
+      "name": "create scene video1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// LLMの出力から {title, scenes} を安全に取り出して正規化する\nfunction extractPlan(j) {\n  // 1) すでに {title, scenes} ならそれを使う\n  if (j && typeof j === 'object' && j.title && Array.isArray(j.scenes)) {\n    return { title: String(j.title), scenes: j.scenes };\n  }\n\n  // 2) n8nのMessage Model: json.message.content\n  if (j?.message?.content !== undefined) {\n    const c = j.message.content;\n    const obj = (typeof c === 'string') ? JSON.parse(c) : c;\n    return { title: String(obj.title || ''), scenes: Array.isArray(obj.scenes) ? obj.scenes : [] };\n  }\n\n  // 3) OpenAIの生レスポンス: json.choices[0].message.content\n  if (Array.isArray(j?.choices) && j.choices[0]?.message?.content !== undefined) {\n    const c = j.choices[0].message.content;\n    const obj = (typeof c === 'string') ? JSON.parse(c) : c;\n    return { title: String(obj.title || ''), scenes: Array.isArray(obj.scenes) ? obj.scenes : [] };\n  }\n\n  throw new Error('Plan JSON not found. Ensure the LLM returns {title, scenes}.');\n}\n\nconst plan = extractPlan($json);\nconst topTitle = String(plan.title || '').trim();\n\n// 先頭に入れる“タイトルだけのシーン”\nconst titleScene = { title: topTitle, body: '', is_title: true };\n\n// すでに同等のエントリ（title同じ・body空）があるなら除去してから先頭に追加\nconst scenesDedup = (plan.scenes || []).filter(s => {\n  const t = String(s?.title || '').trim();\n  const b = String(s?.body || '');\n  return !(t === topTitle && b.trim() === '');\n});\nscenesDedup.unshift(titleScene);\n\n// Split Out がそのまま使える純JSONだけにして返す\nreturn {\n  json: {\n    title: topTitle,\n    scenes: scenesDedup,\n  },\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3328,
+        448
+      ],
+      "id": "373a2092-6ed9-48db-86fc-137eee004153",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Fields - Runtime Paths1').item.json.voicevoxBaseUrl || $items('Run Vars')[0].json.voicevoxBaseUrl }}/audio_query",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "={{ $json.tts_text }}"
+            },
+            {
+              "name": "speaker",
+              "value": "={{$('Fields - Runtime Paths1').item.json.voicevoxSpeakerId || $items('Run Vars')[0].json.voicevoxSpeakerId}}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4128,
+        448
+      ],
+      "id": "1fce76db-82ff-4b15-9f22-33ae654dd316",
+      "name": "VOICEVOX Request1"
+    },
+    {
+      "parameters": {
+        "content": "## ４｜テロップ生成",
+        "height": 304,
+        "width": 1840
+      },
+      "id": "2545c814-ad06-4547-ab25-0b4103d50bda",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2352,
+        688
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## ６｜動画レンダリング",
+        "height": 528,
+        "width": 2608,
+        "color": 6
+      },
+      "id": "585455b1-6517-492d-ac0f-ce4189258cab",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2352,
+        1040
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## ５｜画像生成",
+        "height": 304,
+        "width": 748,
+        "color": 3
+      },
+      "id": "5d04b86b-c002-434d-817c-2e02cd55bbff",
+      "name": "Sticky Note36",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4208,
+        688
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking 'Test workflow'": {
+      "main": [
+        [
+          {
+            "node": "Fields - Runtime Paths1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download bgm file": {
+      "main": [
+        [
+          {
+            "node": "Write bgm file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write bgm file": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "get bgm id": {
+      "main": [
+        [
+          {
+            "node": "Download bgm file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fields - Set Idea1": {
+      "main": [
+        [
+          {
+            "node": "PlanJSON生成1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fields - Runtime Paths1": {
+      "main": [
+        [
+          {
+            "node": "Fields - Set Idea1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image1": {
+      "main": [
+        [
+          {
+            "node": "Upload image file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PlanJSON生成1": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "concat text1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image Prompt1": {
+      "main": [
+        [
+          {
+            "node": "Generate an image1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe audio or video1": {
+      "main": [
+        [
+          {
+            "node": "get words timestamp1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Write srt1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Paging1": {
+      "main": [
+        [
+          {
+            "node": "get pages1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "aggregater1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload audio file1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get words timestamp1": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Paging1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get pages1": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set scene index1": {
+      "main": [
+        [
+          {
+            "node": "VOICEVOX Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write srt1": {
+      "main": [
+        [
+          {
+            "node": "align timestamp1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Covert srt File1": {
+      "main": [
+        [
+          {
+            "node": "Upload srt file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "concat text1": {
+      "main": [
+        [
+          {
+            "node": "set scene index1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload image file1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Transcribe audio or video1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "aggregater1": {
+      "main": [
+        [
+          {
+            "node": "Execute Command1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get video data1": {
+      "main": [
+        [
+          {
+            "node": "get video items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get video items1": {
+      "main": [
+        [
+          {
+            "node": "Download audio1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "create list.txt1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command1": {
+      "main": [
+        [
+          {
+            "node": "get video data1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download audio1": {
+      "main": [
+        [
+          {
+            "node": "Write audio file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write audio file1": {
+      "main": [
+        [
+          {
+            "node": "Download srt1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download srt1": {
+      "main": [
+        [
+          {
+            "node": "Write srt file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write srt file1": {
+      "main": [
+        [
+          {
+            "node": "Download image1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create list.txt1": {
+      "main": [
+        [
+          {
+            "node": "Convert to File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File1": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "concat demuxer1": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "VOICEVOX /synthesis Request1": {
+      "main": [
+        [
+          {
+            "node": "Upload audio file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload srt file1": {
+      "main": [
+        [
+          {
+            "node": "set srt file id1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set srt file id1": {
+      "main": [
+        [
+          {
+            "node": "Generate an image Prompt1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Upload file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk3": {
+      "main": [
+        [
+          {
+            "node": "get bgm id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "concat demuxer1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "align timestamp1": {
+      "main": [
+        [
+          {
+            "node": "Covert srt File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download image1": {
+      "main": [
+        [
+          {
+            "node": "Write image file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write image file1": {
+      "main": [
+        [
+          {
+            "node": "create ass1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create ass1": {
+      "main": [
+        [
+          {
+            "node": "ass header set1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ass header set1": {
+      "main": [
+        [
+          {
+            "node": "create scene video1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create scene video1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "VOICEVOX Request1": {
+      "main": [
+        [
+          {
+            "node": "VOICEVOX /synthesis Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a4959099-e370-417d-b507-1342b5551238",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a69be3ce253ea13b7eda85dc3f6912cfd85043fac5ed34f7b32921ae50f0bb7a"
+  },
+  "id": "VqUTrgz12chNmJqo",
+  "tags": []
+}

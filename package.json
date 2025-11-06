@@ -3,10 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "workspaces": [
+    "n8n-server",
+    "voicevox-server"
+  ],
   "scripts": {
     "start": "docker-compose up -d",
     "import": "bash ./import_workflows.sh",
-    "db_reset": "docker-compose down -v && docker-compose up -d"
+    "db_reset": "docker-compose down -v && docker-compose up -d",
+    "get_link": "ngrok http 5678"
   },
   "keywords": [],
   "author": "",

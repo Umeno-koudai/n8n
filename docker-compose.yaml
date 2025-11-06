@@ -1,30 +1,25 @@
 services:
-  n8n:
-    image: n8nio/n8n:latest # 最新版のn8nイメージを指定
-    container_name: n8n_local # コンテナ名を指定 (任意)
+  n8n:    
+    container_name: n8n_server # コンテナ名を指定 (任意)
     restart: unless-stopped # コンテナが停止した場合、手動で停止しない限り再起動
     ports:
-      - "5678:5678" # ホストOSの5678番ポートをコンテナの5678番ポートに接続
+      - "8080:8080" # ホストOSの8080番ポートをコンテナの8080番ポートに接続
     environment:
-      # 重要: ワークフローの認証情報などを暗号化するためのキー
-      # 下記のコマンドで生成したランダムな文字列を設定してください
       - N8N_ENCRYPTION_KEY=IWKnJGOZrBTVn3MFBMebkWl+z7fp8STId17KhN20FQU=
-      # タイムゾーンを日本時間に設定
       - GENERIC_TIMEZONE=Asia/Tokyo
-      # VOICEVOX エンジンの URL（コンテナ名:ポートで到達可能）
       - VOICEVOX_ENGINE_URL=http://voicevox:50021
-      # その他の設定が必要な場合はここに追加
-      # 例: - N8N_EMAIL_MODE=smtp
-      #     - N8N_SMTP_HOST=your_smtp_host
-      #     ...
+      - N8N_PORT=8080
     volumes:
       # n8nの設定データやワークフローデータを永続化するためのボリューム
       - n8n_data:/home/node/.n8n
       # workflowディレクトリをコンテナにマウント（手動インポート用）
       - ./workflow:/workflows:ro
     depends_on:
-      - voicevox
-    # command: ["npm", "run", "import"]
+     - voicevox
+    build:
+      context: .
+      dockerfile: ./n8n-server/Dockerfile
+    #command: ["npm", "run", "import"]
 
   voicevox:
     image: voicevox/voicevox_engine:latest
